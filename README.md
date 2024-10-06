@@ -1,17 +1,17 @@
-# 使用 LoRA 微调 Meta-Llama-3 1.8B Instruct  
+## Fine-tuning Meta-Llama-3 1.8B Instruct with LoRA  
 
-## 简介  
-本项目使用 LoRA 对 Meta-Llama-3 1.8B Instruct 模型进行微调。  
+## Introduction  
+This project fine-tunes the Meta-Llama-3 1.8B Instruct model using LoRA.  
 
-## 下载模型  
-您可以通过以下方式下载微调后的模型：  
-- **Transformers 库**: 您可以直接使用 Hugging Face 的 Transformers 库来下载该模型。  
-- **Modelscope**: 另外，您也可以通过 Modelscope 下载模型。  
+## Downloading the Model  
+You can download the fine-tuned model through the following methods:  
+- **Transformers Library**: You can directly use Hugging Face's Transformers library to download the model.  
+- **Modelscope**: Alternatively, you can download the model via Modelscope.  
 
-仓库中包含了经过 LoRA 微调后的 Adapter 文件，您可以根据需要进行使用。  
+The repository includes the Adapter files that have been fine-tuned with LoRA, which you can use as needed.  
 
-## 数据集  
-本项目使用的数据集为 [LooksJuicy/Chinese-Roleplay-SingleTurn](https://huggingface.co/datasets/LooksJuicy/Chinese-Roleplay-SingleTurn)。同样，您可以从 Hugging Face 下载该数据集以进行微调。  
+## Dataset  
+The dataset used in this project is [LooksJuicy/Chinese-Roleplay-SingleTurn](https://huggingface.co/datasets/LooksJuicy/Chinese-Roleplay-SingleTurn). Similarly, you can download this dataset from Hugging Face for fine-tuning.  
 
-## GPU
-使用了一块RTX 4090训练了3小时
+## GPU  
+An RTX 4090 was used for training for 3 hours.
