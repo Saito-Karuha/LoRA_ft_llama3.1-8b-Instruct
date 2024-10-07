@@ -1,0 +1,421 @@
+
+	      <!DOCTYPE html>
+<html>
+  <head>
+    <title>CodeSandbox</title>
+
+    <script type="importmap">
+      {"imports":{"react":"https://esm.sh/react","recharts":"https://esm.sh/recharts?external=react,react-dom","react-dom":"https://esm.sh/react-dom","react/jsx-runtime":"https://esm.sh/react/jsx-runtime","react-dom/client":"https://esm.sh/react-dom/client","tailwindcss/defaultTheme":"https://esm.sh/tailwindcss/defaultTheme","tailwindcss-animate":"https://esm.sh/tailwindcss-animate"}}
+    </script>
+
+    <script>
+      window.addEventListener("error", function (event) {
+        const errorObj = {
+          message: event.message,
+          source: event.filename,
+          lineno: event.lineno,
+          colno: event.colno,
+          stack: event.error ? event.error.stack : null
+        };
+        // console.log("errorObj", errorObj, JSON.stringify(errorObj), event);
+
+        window.parent.postMessage(
+          { action: "error", error: JSON.stringify(errorObj) },
+          "*"
+        );
+        // console.log("after error");
+        event.preventDefault();
+      });
+
+  function handleImportError(error) {
+    throw new Error('Import module failed: ' + error.target.src);
+  }
+
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      mutation.addedNodes.forEach(node => {
+        if (node.tagName === 'SCRIPT' && node.type === 'module') {
+          node.onerror = handleImportError;
+        }
+      });
+    });
+  });
+
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+
+  document.querySelectorAll('script[type="module"]').forEach(script => {
+    script.onerror = handleImportError;
+  });
+
+  
+window.console = new Proxy(console, {
+  get(target, prop) {
+    if (['log', 'warn', 'error'].includes(prop)) {
+      return new Proxy(target[prop], {
+        apply(fn, thisArg, args) {
+          fn.apply(thisArg, args);
+          window.parent.postMessage({ action: 'console', 
+            type: prop, 
+            args: args.map((arg) => {
+              try {
+                return JSON.stringify(arg).replace(/^["']|["']$/g, '');
+              } catch (e) {
+                return arg;
+              }
+            }) 
+          }, '*');
+        }
+      });
+    }
+    return target[prop];
+  }
+});
+
+
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
+    <style type="text/tailwindcss">
+      @layer base {
+        :root {
+          --background: 0 0% 100%;
+          --foreground: 222.2 47.4% 11.2%;
+
+          --muted: 210 40% 96.1%;
+          --muted-foreground: 215.4 16.3% 46.9%;
+
+          --popover: 0 0% 100%;
+          --popover-foreground: 222.2 47.4% 11.2%;
+
+          --border: 214.3 31.8% 91.4%;
+          --input: 214.3 31.8% 91.4%;
+
+          --card: 0 0% 100%;
+          --card-foreground: 222.2 47.4% 11.2%;
+
+          --primary: 222.2 47.4% 11.2%;
+          --primary-foreground: 210 40% 98%;
+
+          --secondary: 210 40% 96.1%;
+          --secondary-foreground: 222.2 47.4% 11.2%;
+
+          --accent: 210 40% 96.1%;
+          --accent-foreground: 222.2 47.4% 11.2%;
+
+          --destructive: 0 100% 50%;
+          --destructive-foreground: 210 40% 98%;
+
+          --ring: 215 20.2% 65.1%;
+
+          --radius: 0.5rem;
+        }
+
+        .dark {
+          --background: 224 71% 4%;
+          --foreground: 213 31% 91%;
+
+          --muted: 223 47% 11%;
+          --muted-foreground: 215.4 16.3% 56.9%;
+
+          --accent: 216 34% 17%;
+          --accent-foreground: 210 40% 98%;
+
+          --popover: 224 71% 4%;
+          --popover-foreground: 215 20.2% 65.1%;
+
+          --border: 216 34% 17%;
+          --input: 216 34% 17%;
+
+          --card: 224 71% 4%;
+          --card-foreground: 213 31% 91%;
+
+          --primary: 210 40% 98%;
+          --primary-foreground: 222.2 47.4% 1.2%;
+
+          --secondary: 222.2 47.4% 11.2%;
+          --secondary-foreground: 210 40% 98%;
+
+          --destructive: 0 63% 31%;
+          --destructive-foreground: 210 40% 98%;
+
+          --ring: 216 34% 17%;
+
+          --radius: 0.5rem;
+        }
+      }
+    </style>
+    <script type="module">
+          import defaultTheme from "tailwindcss/defaultTheme"
+          import tailwindcssAnimate from "tailwindcss-animate"
+
+          const fontFamily = defaultTheme.fontFamily;
+
+          tailwind.config = {
+            darkMode: ["class"],
+        content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
+        theme: {
+          container: {
+            center: true,
+            padding: "2rem",
+            screens: {
+              "2xl": "1400px",
+            },
+          },
+          extend: {
+            colors: {
+              border: "hsl(var(--border))",
+              input: "hsl(var(--input))",
+              ring: "hsl(var(--ring))",
+              background: "hsl(var(--background))",
+              foreground: "hsl(var(--foreground))",
+              primary: {
+                DEFAULT: "hsl(var(--primary))",
+                foreground: "hsl(var(--primary-foreground))",
+              },
+              secondary: {
+                DEFAULT: "hsl(var(--secondary))",
+                foreground: "hsl(var(--secondary-foreground))",
+              },
+              destructive: {
+                DEFAULT: "hsl(var(--destructive))",
+                foreground: "hsl(var(--destructive-foreground))",
+              },
+              muted: {
+                DEFAULT: "hsl(var(--muted))",
+                foreground: "hsl(var(--muted-foreground))",
+              },
+              accent: {
+                DEFAULT: "hsl(var(--accent))",
+                foreground: "hsl(var(--accent-foreground))",
+              },
+              popover: {
+                DEFAULT: "hsl(var(--popover))",
+                foreground: "hsl(var(--popover-foreground))",
+              },
+              card: {
+                DEFAULT: "hsl(var(--card))",
+                foreground: "hsl(var(--card-foreground))",
+              },
+            },
+            borderRadius: {
+              lg: `var(--radius)`,
+              md: `calc(var(--radius) - 2px)`,
+              sm: "calc(var(--radius) - 4px)",
+            },
+            fontFamily: {
+              sans: [...fontFamily.sans],
+            },
+
+            keyframes: {
+              "accordion-down": {
+                from: { height: "0" },
+                to: { height: "var(--radix-accordion-content-height)" },
+              },
+              "accordion-up": {
+                from: { height: "var(--radix-accordion-content-height)" },
+                to: { height: "0" },
+              },
+            },
+            animation: {
+              "accordion-down": "accordion-down 0.2s ease-out",
+              "accordion-up": "accordion-up 0.2s ease-out",
+            },
+          },
+        },
+        plugins: [tailwindcssAnimate]
+      }
+    </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel" data-type="module">
+      		  import {createRoot} from "react-dom/client";
+      		  
+import React from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+const data = [
+  {step: 10, loss: 1.850000},
+  {step: 20, loss: 1.437700},
+  {step: 30, loss: 1.407400},
+  {step: 40, loss: 1.346900},
+  {step: 50, loss: 1.296800},
+  {step: 60, loss: 1.296800},
+  {step: 70, loss: 1.318600},
+  {step: 80, loss: 1.266800},
+  {step: 90, loss: 1.290100},
+  {step: 100, loss: 1.268000},
+  {step: 110, loss: 1.255200},
+  {step: 120, loss: 1.244600},
+  {step: 130, loss: 1.254400},
+  {step: 140, loss: 1.230200},
+  {step: 150, loss: 1.252100},
+  {step: 160, loss: 1.257700},
+  {step: 170, loss: 1.215200},
+  {step: 180, loss: 1.188300},
+  {step: 190, loss: 1.185500},
+  {step: 200, loss: 1.214900},
+  {step: 210, loss: 1.210700},
+  {step: 220, loss: 1.208900},
+  {step: 230, loss: 1.193200},
+  {step: 240, loss: 1.175000},
+  {step: 250, loss: 1.234400},
+  {step: 260, loss: 1.188400},
+  {step: 270, loss: 1.188300},
+  {step: 280, loss: 1.189600},
+  {step: 290, loss: 1.163400},
+  {step: 300, loss: 1.171900},
+  {step: 310, loss: 1.190400},
+  {step: 320, loss: 1.126400},
+  {step: 330, loss: 1.164900},
+  {step: 340, loss: 1.175500},
+  {step: 350, loss: 1.134800},
+  {step: 360, loss: 1.141900},
+  {step: 370, loss: 1.164700},
+  {step: 380, loss: 1.138200},
+  {step: 390, loss: 1.129500},
+  {step: 400, loss: 1.152500},
+  {step: 410, loss: 1.127400},
+  {step: 420, loss: 1.152500},
+  {step: 430, loss: 1.225800},
+  {step: 440, loss: 1.121300},
+  {step: 450, loss: 1.153000},
+  {step: 460, loss: 1.126700},
+  {step: 470, loss: 1.140900},
+  {step: 480, loss: 1.069400},
+  {step: 490, loss: 1.080300},
+  {step: 500, loss: 0.963700},
+  {step: 510, loss: 0.980000},
+  {step: 520, loss: 0.976700},
+  {step: 530, loss: 0.995800},
+  {step: 540, loss: 0.980700},
+  {step: 550, loss: 1.004200},
+  {step: 560, loss: 0.985100},
+  {step: 570, loss: 1.007200},
+  {step: 580, loss: 0.979600},
+  {step: 590, loss: 0.967700},
+  {step: 600, loss: 1.069100},
+  {step: 610, loss: 0.983100},
+  {step: 620, loss: 0.974900},
+  {step: 630, loss: 0.984800},
+  {step: 640, loss: 0.960700},
+  {step: 650, loss: 0.961900},
+  {step: 660, loss: 0.975200},
+  {step: 670, loss: 0.991000},
+  {step: 680, loss: 0.997400},
+  {step: 690, loss: 0.997700},
+  {step: 700, loss: 0.968400},
+  {step: 710, loss: 0.966800},
+  {step: 720, loss: 0.968700},
+  {step: 730, loss: 0.939400},
+  {step: 740, loss: 0.993600},
+  {step: 750, loss: 1.065000},
+  {step: 760, loss: 0.967600},
+  {step: 770, loss: 0.974500},
+  {step: 780, loss: 0.969000},
+  {step: 790, loss: 0.956600},
+  {step: 800, loss: 0.945900},
+  {step: 810, loss: 0.966300},
+  {step: 820, loss: 1.000600},
+  {step: 830, loss: 0.943100},
+  {step: 840, loss: 0.979000},
+  {step: 850, loss: 0.937100},
+  {step: 860, loss: 0.948300},
+  {step: 870, loss: 0.962500},
+  {step: 880, loss: 0.962600},
+  {step: 890, loss: 0.945800},
+  {step: 900, loss: 0.981100},
+  {step: 910, loss: 0.948500},
+  {step: 920, loss: 0.951800},
+  {step: 930, loss: 0.964300},
+  {step: 940, loss: 0.984300},
+  {step: 950, loss: 0.912000},
+  {step: 960, loss: 0.832700},
+  {step: 970, loss: 0.845400},
+  {step: 980, loss: 0.835700},
+  {step: 990, loss: 0.829700},
+  {step: 1000, loss: 0.823400},
+  {step: 1010, loss: 0.825100},
+  {step: 1020, loss: 0.820600},
+  {step: 1030, loss: 0.824800},
+  {step: 1040, loss: 0.844000},
+  {step: 1050, loss: 0.868600},
+  {step: 1060, loss: 0.846500},
+  {step: 1070, loss: 0.842400},
+  {step: 1080, loss: 0.827200},
+  {step: 1090, loss: 0.852000},
+  {step: 1100, loss: 0.832700},
+  {step: 1110, loss: 0.827200},
+  {step: 1120, loss: 0.859400},
+  {step: 1130, loss: 0.824300},
+  {step: 1140, loss: 0.829100},
+  {step: 1150, loss: 0.843800},
+  {step: 1160, loss: 0.916900},
+  {step: 1170, loss: 0.835400},
+  {step: 1180, loss: 0.878300},
+  {step: 1190, loss: 0.824100},
+  {step: 1200, loss: 0.861700},
+  {step: 1210, loss: 0.823200},
+  {step: 1220, loss: 0.855100},
+  {step: 1230, loss: 0.844500},
+  {step: 1240, loss: 0.817100},
+  {step: 1250, loss: 0.816400},
+  {step: 1260, loss: 0.819900},
+  {step: 1270, loss: 0.826800},
+  {step: 1280, loss: 0.844100},
+  {step: 1290, loss: 0.827700},
+  {step: 1300, loss: 0.833900},
+  {step: 1310, loss: 0.853800},
+  {step: 1320, loss: 0.843200},
+  {step: 1330, loss: 0.832000},
+  {step: 1340, loss: 0.834100},
+  {step: 1350, loss: 0.815500},
+  {step: 1360, loss: 0.829600},
+  {step: 1370, loss: 0.810200},
+  {step: 1380, loss: 0.850700},
+  {step: 1390, loss: 0.826600},
+  {step: 1400, loss: 0.840900},
+  {step: 1410, loss: 0.839200},
+  {step: 1420, loss: 0.844400},
+];
+
+function TrainingLossChart() {
+  return (
+    <div className="w-full h-[500px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis 
+            dataKey="step" 
+            label={{ value: 'Training Steps', position: 'insideBottomRight', offset: -10 }}
+          />
+          <YAxis 
+            label={{ value: 'Loss', angle: -90, position: 'insideLeft' }}
+            domain={['auto', 'auto']}
+          />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="loss" stroke="#8884d8" dot={false} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+      		  createRoot(document.getElementById("root")).render(
+             <>
+      		    <TrainingLossChart />
+              </>
+      		    );
+              window.parent.postMessage({ action: "ready" }, "*");
+    </script>
+  </body>
+</html>
